@@ -25,7 +25,7 @@ public class DeleteServlet extends HttpServlet {
         String sid = request.getParameter("id");
         int id = Integer.parseInt(sid);
         UserDao.delete(id);
-        response.sendRedirect("ViewSErvlet");
+        response.sendRedirect("ViewServlet");
     }
     
 

@@ -30,6 +30,7 @@ public class EditServlet2 extends HttpServlet {
         String role = request.getParameter("role");
         
         User e = new User();
+        e.setId(id);
         e.setUsername(username);
         e.setPassword(password);
         e.setRole(role);

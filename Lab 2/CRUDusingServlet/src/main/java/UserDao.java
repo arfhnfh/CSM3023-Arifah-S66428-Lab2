@@ -5,32 +5,31 @@
 
 /**
  *
- * @author Ahmad Afif Syahmi bin Ahmad Rozali
+ * @author Arifah S66428
  */
+
+
 import java.util.*;
 import java.sql.*;
 
 public class UserDao {
-    
-    public static Connection getConnection() {
+    public static Connection getConnection(){
         Connection con = null;
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/CSM3023 Lab 2", "root", "admin");
+        try{
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con= DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/users", "root", "admin");
         }
-        catch (Exception e) {
+        catch (Exception e){
             System.out.println(e);
         }
         return con;
     }
     
-    public static int save(User e) {
+    public static int save(User e){
         int status = 0;
-        try {
+        try{
             Connection con = UserDao.getConnection();
-            PreparedStatement ps = con.prepareStatement(
-                    "INSERT INTO users(username, password, roles) VALUES (?, ?, ?)"
-            );
+            PreparedStatement ps = con.prepareStatement("insert into users(username,password, roles) values (?,?,?)");
             ps.setString(1, e.getUsername());
             ps.setString(2, e.getPassword());
             ps.setString(3, e.getRole());
@@ -38,20 +37,19 @@ public class UserDao {
             status = ps.executeUpdate();
             
             con.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
-        
+        catch (Exception ex){
+            ex.printStackTrace();
+            
+        }
         return status;
     }
     
-    public static int update(User e) {
-        int status = 0;
-        try {
+    public static int update(User e){
+        int status =0;
+        try{
             Connection con = UserDao.getConnection();
-            PreparedStatement ps = con.prepareStatement(
-                    "UPDATE users SET username = ?, password = ?, roles = ? WHERE id = ?"
-            );
+            PreparedStatement ps = con.prepareStatement("update users set username=?,password=?, roles=? where id=?");
             ps.setString(1, e.getUsername());
             ps.setString(2, e.getPassword());
             ps.setString(3, e.getRole());
@@ -60,68 +58,60 @@ public class UserDao {
             status = ps.executeUpdate();
             
             con.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
-        
-        return status;
-    }
-    
-    public static int delete(int id) {
-        int status = 0;
-        
-        try {
-            Connection con = UserDao.getConnection();
-            PreparedStatement ps = con.prepareStatement(
-                    "DELETE FROM users WHERE id = ?"
-            );
-            ps.setInt(1, id);
+         catch (Exception ex){
+            ex.printStackTrace();
             
+        }
+        return status;
+}
+    public static int delete(int id){
+        int status =0;
+        try{
+            Connection con = UserDao.getConnection();
+            PreparedStatement ps = con.prepareStatement("delete from users where id=?");
+            ps.setInt(1, id);
             status = ps.executeUpdate();
             
             con.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
-        
+        catch (Exception e){
+            e.printStackTrace();
+        }
         return status;
     }
     
-    public static User getUserById(int id) {
+    public static User getUserById(int id){
         User e = new User();
-        
-        try {
+        try{
             Connection con = UserDao.getConnection();
-            PreparedStatement ps = con.prepareStatement(
-                    "SELECT * FROM users WHERE id = ?"
-            );
+            PreparedStatement ps = con.prepareStatement("select * from users where id=?");
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
-            if (rs.next()) {
+            if(rs.next()){
                 e.setId(rs.getInt(1));
                 e.setUsername(rs.getString(2));
                 e.setPassword(rs.getString(3));
                 e.setRole(rs.getString(4));
             }
-            
             con.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+            
         }
         
+            catch(Exception ex){
+                ex.printStackTrace();
+            }
         return e;
     }
     
-    public static List<User> getAllUsers() {
+    public static List<User> getAllUsers(){
         List<User> list = new ArrayList<User>();
         
-        try {
+        try{
             Connection con = UserDao.getConnection();
-            PreparedStatement ps = con.prepareStatement(
-                    "SELECT * FROM users"
-            );
+            PreparedStatement ps = con.prepareStatement("select * from users");
             ResultSet rs = ps.executeQuery();
-            while (rs.next()) {
+            while (rs.next()){
                 User e = new User();
                 e.setId(rs.getInt(1));
                 e.setUsername(rs.getString(2));
@@ -130,11 +120,11 @@ public class UserDao {
                 list.add(e);
             }
             con.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        }
+        catch(Exception e){
+            e.printStackTrace();
         }
         
         return list;
     }
-    
 }
